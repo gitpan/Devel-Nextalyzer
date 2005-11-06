@@ -2,10 +2,9 @@ package Devel::Nextalyzer;
 
 use strict;
 use Class::ISA;
-use Text::ASCIITable;
-use Text::ASCIITable::Wrap qw/wrap/;
+use Text::SimpleTable;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 our $RAW     = 0;
 
 =head1 NAME
@@ -40,23 +39,17 @@ sub import {
     my %overloaded;
 
     my @t;
-    my $t = Text::ASCIITable->new;
-    $t->setCols( 'Class', 'Provided Methods', 'Overloaded Methods' );
-    $t->setColWidth( 'Class',              24, 1 );
-    $t->setColWidth( 'Provided Methods',   23, 1 );
-    $t->setColWidth( 'Overloaded Methods', 23, 1 );
+    my $t = Text::SimpleTable->new(
+        [ 24, 'Class' ],
+        [ 23, 'Provided Methods' ],
+        [ 23, 'Overloaded Methods' ]
+    );
 
     my @np;
-    my $np = Text::ASCIITable->new;
-    $np->setCols('Method');
-    $np->setOptions( { hide_HeadLine => 1, hide_HeadRow => 1 } );
-    $np->setColWidth( 'Method', 74, 1 );
+    my $np = Text::SimpleTable->new( [ 76, 'Method' ] );
 
     my @mix;
-    my $mix = Text::ASCIITable->new;
-    $mix->setCols( 'Class', 'Method' );
-    $mix->setColWidth( 'Class',  37, 1 );
-    $mix->setColWidth( 'Method', 36, 1 );
+    my $mix = Text::SimpleTable->new( [ 37, 'Class' ], [ 36, 'Method' ] );
 
     foreach my $super (@path) {
         my $file = $super;
@@ -92,18 +85,14 @@ sub import {
         }
         close IN;
         foreach (@overloads) {
-            $np->addRow( wrap( $_, 47, 1 ) ) unless $provided{$_};
+            $np->row( wrap( $_, 47, 1 ) ) unless $provided{$_};
             push @np, "$_\n";
             push( @{ $overloaded{$_} }, $super );
         }
         $provided{$_} = $super for @provides;
         my $provides  = join( "\n", @provides );
         my $overloads = join( "\n", @overloads );
-        $t->addRow(
-            wrap( $super,     24, 1 ),
-            wrap( $provides,  23, 1 ),
-            wrap( $overloads, 23, 1 )
-        );
+        $t->row( $super, $provides, $overloads );
         $provides  =~ s/\n/ /g;
         $overloads =~ s/\n/ /g;
         push @t, "$super, $provides, $overloads\n";
@@ -119,7 +108,7 @@ sub import {
     foreach my $o ( keys %overloaded ) {
         my $pr = $provided{$o};
         my $mixins = join( "\n", reverse @{ $overloaded{$o} } );
-        $mix->addRow( wrap( $mixins, 37, 1 ), wrap( $o, 36, 1 ) ) unless $pr;
+        $mix->row( $mixins, $o ) unless $pr;
         $mixins =~ s/\n/ /g;
         push @mix, "$mixins, $o";
     }
