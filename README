@@ -1,0 +1,25 @@
+NAME
+    Devel::Nextalyzer - Making Multiple Inheritance and NEXT less scary
+
+SYNOPSIS
+        # Compile time
+        use Devel::Nextalyzer;
+
+        # Runtime
+        require Devel::Nextalyzer;
+        import Devel::Nextalyzer;
+
+DESCRIPTION
+    Multiple Inheritance and NEXT are great tools for the right tasks, this
+    ana this analyzer will make it much less scary.
+
+SEE ALSO
+    NEXT, DBIx::Class, Catalyst
+
+AUTHOR
+    Sebastian Riedel, "sri@oook.de" Matt S Trout
+
+LICENSE
+    This library is free software . You can redistribute it and/or modify it
+    under the same terms as perl itself.
+

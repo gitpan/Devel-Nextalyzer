@@ -1,0 +1,13 @@
+Revision history for Perl extension Devel::Nextalyzer
+
+0.04  Fri Jan 27 00:00:00 2005
+        - Fixed broken release
+
+0.03  Fri Jan 27 00:00:00 2005
+        - Fixed a typo
+
+0.02  Mon Nov 07 00:00:00 2005
+        - Switched to Text::SimpleTable
+
+0.01  Mon Aug 01 00:00:00 2005
+        - original version.
